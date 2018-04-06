@@ -1,0 +1,206 @@
+{
+	"NumPlayers": 4,
+	"RuleSet": "Standard",
+	"players": [{
+			"Seat": 1,
+			"Type": "Human",
+			"Name": "Anna",
+			"Colour": "Green",
+			"Role": "Captain",
+			"CharRef": "001"
+		},
+		{
+			"Seat": 2,
+			"Type": "Human",
+			"Name": "Bill",
+			"Colour": "Blue",
+			"Role": "Chief Engineer",
+			"CharRef": "001"
+		},
+		{
+			"Seat": 3,
+			"Type": "Human",
+			"Name": "Carla",
+			"Colour": "Red",
+			"Role": "none",
+			"CharRef": "001"
+		},
+		{
+			"Seat": 4,
+			"Type": "Human",
+			"Name": "Dave",
+			"Colour": "Yellow",
+			"Role": "none",
+			"CharRef": "001"
+		},
+		{
+			"Seat": 5,
+			"Type": "none",
+			"Name": "none",
+			"Colour": "Purple",
+			"Role": "none",
+			"CharRef": "001"
+		}
+	],
+	"trajectory": {
+			"red": "T1",
+			"white": "T7",
+			"blue": "T3",
+			"green": "T4"
+		},
+	"extthreats": [{
+			"Turn": 0,
+			"threatcode": "none",
+			"trajectory": "none"
+		},
+		{
+			"Turn": 1,
+			"threatcode": "none",
+			"trajectory": "none"
+		},
+		{
+			"Turn": 2,
+			"threatcode": "E1-03",
+			"trajectory": "red"
+		},
+		{
+			"Turn": 3,
+			"threatcode": "none",
+			"trajectory": "none"
+		},
+		{
+			"Turn": 4,
+			"threatcode": "none",
+			"trajectory": "none"
+		},
+		{
+			"Turn": 5,
+			"threatcode": "E1-04",
+			"trajectory": "blue"
+		},
+		{
+			"Turn": 6,
+			"threatcode": "SE2-01",
+			"trajectory": "white"
+		},
+		{
+			"Turn": 7,
+			"threatcode": "none",
+			"trajectory": "none"
+		},
+		{
+			"Turn": 8,
+			"threatcode": "E1-01",
+			"trajectory": "red"
+		}
+		
+	],
+
+
+	"intthreats": [{
+			"01": "none"
+		},
+		{
+			"02": "none"
+		},
+		{
+			"03": "none"
+		},
+		{
+			"04": "none"
+		},
+		{
+			"05": "none"
+		},
+		{
+			"06": "none"
+		},
+		{
+			"07": "none"
+		},
+		{
+			"08": "none"
+		},
+		{
+			"09": "none"
+		},
+		{
+			"10": "none"
+		},
+		{
+			"11": "none"
+		},
+		{
+			"12": "none"
+		}
+	],
+	
+	"PlayerActions": [
+	{"Player": 1,
+	"1": "lift",
+	"2": "red",
+	"3": "lift",
+	"4": "none",
+	"5": "A",
+	"6": "A",
+	"7": "A",
+	"8": "blue",
+	"9": "blue",
+	"10": "A",
+	"11": "A",
+	"12": "A"},
+	{"Player": 2,
+	"1": "lift",
+	"2": "lift",
+	"3": "none",
+	"4": "red",
+	"5": "A",
+	"6": "A",
+	"7": "A",
+	"8": "blue",
+	"9": "A",
+	"10": "A",
+	"11": "A",
+	"12": "A"},
+	{"Player": 3,
+	"1": "blue",
+	"2": "lift",
+	"3": "red",
+	"4": "red",
+	"5": "none",
+	"6": "B",
+	"7": "none",
+	"8": "none",
+	"9": "none",
+	"10": "none",
+	"11": "none",
+	"12": "none"},
+	{"Player": 4,
+	"1": "none",
+	"2": "none",
+	"3": "none",
+	"4": "none",
+	"5": "none",
+	"6": "none",
+	"7": "none",
+	"8": "none",
+	"9": "none",
+	"10": "none",
+	"11": "none",
+	"12": "none"},
+	{"Player": 5,
+	"1": "none",
+	"2": "none",
+	"3": "none",
+	"4": "none",
+	"5": "none",
+	"6": "none",
+	"7": "none",
+	"8": "none",
+	"9": "none",
+	"10": "none",
+	"11": "none",
+	"12": "none"}
+
+	]
+}
