@@ -405,15 +405,63 @@ function BActions(deck, position) {
 			case "upper" :
 				switch(position) {
 					case "red" :
-					Action = " charges red shields"
+					
+					powerRequired = ship.shields.redmax - ship.shields.red
+					
+					if (powerRequired > ship.reactor.red) {
+						powerToMove = ship.reactor.red
+						ship.reactor.red = 0
+						ship.shields.red = ship.shields.red + powerToMove
+						
+					} else {
+						ship.reactor.red = ship.reactor.red - powerRequired
+						powerToMove = powerRequired
+						ship.shields.red = ship.shields.red + powerRequired
+						
+					}
+					
+					Action = " moves " + powerToMove + " power to red shields"					
+										
 					break;
 					
 					case "white" :
-					Action = " charges white shields"
+					
+					powerRequired = ship.shields.whitemax - ship.shields.white
+					
+					if (powerRequired > ship.reactor.white) {
+						powerToMove = ship.reactor.white
+						ship.reactor.white = 0
+						ship.shields.white = ship.shields.white + powerToMove
+						
+					} else {
+						ship.reactor.white = ship.reactor.white - powerRequired
+						powerToMove = powerRequired
+						ship.shields.white = ship.shields.white + powerRequired
+						
+					}
+					
+					Action = " moves " + powerToMove + " power to white shields"					
+										
 					break;
 					
 					case "blue" :
-					Action = " charges blue shields"
+					
+					powerRequired = ship.shields.bluemax - ship.shields.blue
+					
+					if (powerRequired > ship.reactor.blue) {
+						powerToMove = ship.reactor.blue
+						ship.reactor.blue = 0
+						ship.shields.blue = ship.shields.blue + powerToMove
+						
+					} else {
+						ship.reactor.blue = ship.reactor.blue - powerRequired
+						powerToMove = powerRequired
+						ship.shields.blue = ship.shields.blue + powerRequired
+						
+					}
+					
+					Action = " moves " + powerToMove + " power to blue shields"					
+										
 					break;
 				}			
 			
@@ -448,14 +496,14 @@ function BActions(deck, position) {
 							ship.reactor.white = 5
 							Action = " spends a fuel rod to charge the main reactor"
 						} else {
-							Action = " tries to refule the main reactor but there is no more fuel"
+							Action = " tries to refuel the main reactor but there is no more fuel"
 						}
 					break;
 					
 					case "blue" :
 					powerRequired = ship.reactor.bluemax - ship.reactor.blue
 					
-					if (powerRequiblue > ship.reactor.white) {
+					if (powerRequired > ship.reactor.white) {
 						powerToMove = ship.reactor.white
 						ship.reactor.white = 0
 						ship.reactor.blue = ship.reactor.blue + powerToMove

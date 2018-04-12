@@ -68,21 +68,25 @@ function initPlayers() {
 function initShip(){
 	
 	ship.shields = {};
-	ship.reactor = {};
-	
 	ship.shields.red = 1
 	ship.shields.white = 1
 	ship.shields.blue = 1
+	ship.shields.redmax = 2
+	ship.shields.whitemax = 3
+	ship.shields.bluemax = 2
+	
+	ship.reactor = {};	
 	ship.reactor.red = 2
 	ship.reactor.white = 3
 	ship.reactor.blue = 2
 	ship.fuel = 3
-	ship.computer = "none"
-	ship.rockets = 3
 	ship.reactor.redmax = 3
 	ship.reactor.whitemax = 5
 	ship.reactor.bluemax = 3	
 	
+	ship.computer = "none"
+	ship.rockets = 3
+		
 	};
 
 //app.listen(3000, function () {
