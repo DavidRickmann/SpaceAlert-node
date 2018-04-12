@@ -11,12 +11,13 @@ module.exports = {
 		var flags = {
 			
 			"turn": 1,
-			"debug": 1,
-			"intro": 0,
-			"threatAppears": 0,
-			"threatAction": 0,
+			"debug": 0,
+			"intro": 1,
+			"threatAppears": 1,
+			"threatAction": 1,
 			"crewMove" : 1,
-			"delays" : 1
+			"delays" : 1,
+			"report" : 1
 		
 		}
 		

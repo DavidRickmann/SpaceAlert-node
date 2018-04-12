@@ -14,11 +14,19 @@ module.exports = {
 	
 	processTurn : function () {
 		
-		
+	//reset delay flag
+	players.forEach(function(item, index, array) {
+		item.delay = 0
+	})
+	
 	var out = require("./output");
 		
-	out.screen("Turn: " + Turn , "turn");
-						
+	out.screen(" " , "turn")
+	out.screen("-----------------------------------------" , "turn")
+	out.screen("                 TURN " + Turn, "turn")
+	out.screen("-----------------------------------------" , "turn")
+	out.screen(" " , "turn")
+	
 	//Threat Appears
 			
 	threatAppears();	
@@ -31,20 +39,34 @@ module.exports = {
 	
 	//Threat Actions
 		
-	//threatActions();	
+	threatActions();	
 	
 	//Rocket Resolution	
 	
 	//Computer Maintenance Check
 	
 	//If RuleSet !== Training
-	//On Turns 2 Or 5 
-	//add 1 to delaycount
-
+	
+	
+	
+	if (ship.computer == "none" && (Turn == 2 || Turn == 5 || Turn == 9)) {
+		players.forEach(function(item, index, array) {
+			if (item.delay == 0) {
+				players[index].actions = moveDelay(players[index].actions,Turn) 
+				item.delay = 1 //this should get reset to zero straight away, (at the start of the next turn).
+				out.screen("COMPUTER ERROR: " + item.Name + " is delayed", "delays")
+			} 
+				
+		})
+	}
+	
+	//reset computer
+	if (Turn == 3 || Turn == 6) {ship.computer = "none"}
+		
+		
 	//victory or defeat?
 	
-	
-	
+	TurnReport()
 	
 	}
 
@@ -87,6 +109,7 @@ function threatActions() {
 
 var trajectory = require("./trajectory.json");
 var Moves = 0
+var out = require("./output");
 
 	enemy.forEach(function(item, index, array) {
 		
@@ -123,7 +146,7 @@ var Moves = 0
 
 function resolveAction(type, index) {
 var Action
-
+var out = require("./output");
 switch(type) {
 	
 	case "X":
@@ -165,28 +188,17 @@ function playerActions() {
 	lasers.redsmall = "none";
 	lasers.bluesmall = "none";
 	
+	rockets = {};
+	rockets.one = "ready";
+	rockets.two = "ready";
+	rockets.three = "ready";
+	
 	players.forEach(function(item, index, array) {	
-		//if players are delayed for any reason we add that onto the Turn value so we get a later move.
-		moves = game.PlayerActions
-		actions = moves.filter(function(moves) {return moves.Player == players[index].Seat})[0];
-		moveTurn = Turn - players[index].delay
-		
-		if (players[index].delay > 0) {out.screen(players[index].Name + " is delayed " + players[index].delay + ". Now on Turn " + moveTurn, "delays")}
-		
-		while (players[index].delay > 0 && actions[moveTurn] == "none") {
-			players[index].delay = players[index].delay -1
-			moveTurn = Turn - players[index].delay
-			out.screen(players[index].Name + " delay is reduced by 1. Now on Turn " + moveTurn, "delays")
-			
-		} 
-		
 		
 				
-						
-		
 		
 		//now do something with that data
-		switch(actions[moveTurn]) {
+		switch(players[index].actions[Turn]) {
 		
 		case "lift" :
 			if (lift[players[index].position] == "none") {
@@ -205,9 +217,10 @@ function playerActions() {
 				out.screen(players[index].Name + " used the " + players[index].position + " lift and is now at " + players[index].deck + " deck " + players[index].position , "crewMove" )
 				
 			} else {
-				out.screen(players[index].Name + " tried to use the " + players[index].position + " lift but " + lift[players[index].position] + " was already using it so is delayed", "crewMove")
-				players[index].delay = players[index].delay + 1
-			}
+				players[index].actions = moveDelay(players[index].actions,Turn) 	
+				players[index].delay = players[index].delay = 1
+				out.screen(players[index].Name + " tried to use the " + players[index].position + " lift but " + lift[players[index].position] + " was already using it so is delayed ", "crewMove")
+				}
 			break;
 		
 		case "red" :
@@ -277,8 +290,7 @@ function playerActions() {
 
 };
 	
-	
-	function AActions(deck, position, player) {
+function AActions(deck, position, player) {
 		
 		
 		switch(deck) {
@@ -310,7 +322,7 @@ function playerActions() {
 						if (ship.reactor.white == 0) {
 							Action = " presses the white heavy laser cannon, but the reactor is empty"
 						} else {
-							Action = "tries to fire the white heavy laser but " + lasers.white + " already fiwhite it!"
+							Action = " tries to fire the white heavy laser but " + lasers.white + " already fired it!"
 						}
 					};
 										
@@ -325,7 +337,7 @@ function playerActions() {
 						if (ship.reactor.blue == 0) {
 							Action = " presses the blue heavy laser cannon, but the reactor is empty"
 						} else {
-							Action = "tries to fire the blue heavy laser but " + lasers.blue + " already fiblue it!"
+							Action = " tries to fire the blue heavy laser but " + lasers.blue + " already fired it!"
 						}
 					};
 										
@@ -338,15 +350,36 @@ function playerActions() {
 			case "lower" :
 				switch(position) {
 					case "red" :
-					Action = " fires red light laser cannon"
+						if (lasers.redsmall == "none") {
+							lasers.redsmall = player
+							Action = " fires red lateral laser cannon"
+						} else {
+							Action = " tries to fire the red lateral laser but " + lasers.redsmall + " already fired it!"
+						}
+					
+										
 					break;
 					
+					
 					case "white" :
-					Action = " fires pulse cannon"
+					if (lasers.pulse == "none") {
+							lasers.pulse = player
+							Action = " fires the pulse cannon"
+						} else {
+							Action = " tries to fire the pulse cannon but " + lasers.pulse + " already fired it!"
+						}
+					
+										
 					break;
 					
 					case "blue" :
-					Action = " fires blue light laser cannon"
+						if (lasers.bluesmall == "none") {
+							lasers.bluesmall = player
+							Action = " fires blue lateral laser cannon"
+						} else {
+							Action = " tries to fire the blue lateral laser but " + lasers.bluesmall + " already fired it!"
+						}
+													
 					break;
 				}	
 			
@@ -361,14 +394,11 @@ function playerActions() {
 				
 		
 	}
-	
-
-	
 
 function BActions(deck, position) {
 		
-		var energytomove = 0
-		
+		var powerToMove = 0;
+		var powerRequired = 0;
 		
 		switch(deck) {
 		
@@ -393,16 +423,52 @@ function BActions(deck, position) {
 			case "lower" :
 				switch(position) {
 					case "red" :
-					Action = " charges red lateral reactor"
-					ship.reactor.red
+					
+					powerRequired = ship.reactor.redmax - ship.reactor.red
+					
+					if (powerRequired > ship.reactor.white) {
+						powerToMove = ship.reactor.white
+						ship.reactor.white = 0
+						ship.reactor.red = ship.reactor.red + powerToMove
+						
+					} else {
+						ship.reactor.white = ship.reactor.white - powerRequired
+						powerToMove = powerRequired
+						ship.reactor.red = ship.reactor.red + powerRequired
+						
+					}
+					
+					Action = " moves " + powerToMove + " power from white to red"
+					
 					break;
 					
 					case "white" :
-					Action = " charges main reactor"
+						if (ship.fuel > 0) {
+							ship.fuel = ship.fuel - 1
+							ship.reactor.white = 5
+							Action = " spends a fuel rod to charge the main reactor"
+						} else {
+							Action = " tries to refule the main reactor but there is no more fuel"
+						}
 					break;
 					
 					case "blue" :
-					Action = " charges blue lateral reactor"
+					powerRequired = ship.reactor.bluemax - ship.reactor.blue
+					
+					if (powerRequiblue > ship.reactor.white) {
+						powerToMove = ship.reactor.white
+						ship.reactor.white = 0
+						ship.reactor.blue = ship.reactor.blue + powerToMove
+						
+					} else {
+						ship.reactor.white = ship.reactor.white - powerRequired
+						powerToMove = powerRequired
+						ship.reactor.blue = ship.reactor.blue + powerRequired
+						
+					}
+					
+					Action = " moves " + powerToMove + " power from white to blue"
+					
 					break;
 				}	
 			
@@ -418,7 +484,6 @@ function BActions(deck, position) {
 		
 	}
 
-
 function CActions(deck, position) {
 		
 		
@@ -432,6 +497,7 @@ function CActions(deck, position) {
 					
 					case "white" :
 					Action = " wiggles the mouse"
+					ship.computer = players.Name
 					break;
 					
 					case "blue" :
@@ -469,4 +535,78 @@ function CActions(deck, position) {
 		
 	}
 
+function TurnReport() {
+	var out = require("./output");
+	
+	if (Turn == 0) {out.screen("BEGIN MISSION", "turn")}
+	
+	out.screen(" " , "report")
+	out.screen(   "---------------SHIP STATUS---------------" , "report")
+	out.screen("Reactor Status: " + ship.reactor.red + "/" + ship.reactor.white + "/" + ship.reactor.blue +   "  Fuel: "  + ship.fuel, "report")
+	out.screen("Shield Status: " + ship.shields.red + "/" + ship.shields.white + "/" + ship.shields.blue, "report")
+	out.screen("Heavy Weapon Status: " + lasers.red + " / " + lasers.white + " / " + lasers.blue, "report")
+	out.screen("Light Weapon Status: " + lasers.redsmall + " / " + lasers.pulse + " / " + lasers.bluesmall, "report")
+	out.screen("Rocket Status: Available(" + ship.rockets + ") " + rockets.one + " / " + rockets.two + " / " + rockets.three, "report")
+	out.screen("-----------------------------------------" , "report")
+	out.screen(" " , "report")
+	
+	if (Turn == 13) {out.screen("MISSION COMPLETE", "turn")}
+	
+	
+}
 
+function moveDelay(Actions,Turn) {
+	var out = require("./output");
+	var delayedActions = new Object();
+	var noneFlag = 0
+	
+		
+	delayedActions.Player = Actions.Player	
+	
+	
+	var index;
+		for (index = 1; index < 13; index++) {
+		
+				
+		if (index < Turn) {
+			delayedActions[index] = Actions[index]
+		} 
+		if (index == Turn) {
+			delayedActions[index] = "none"
+		}
+		if (index > Turn && noneFlag==0) {
+			delayedActions[index] = Actions[index -1] 
+			if (Actions[index] == "none") {
+				noneFlag = 1
+			
+			} 
+		} else {
+			if (index > Turn && noneFlag == 1) {
+				delayedActions[index] = Actions[index]
+			}
+		}
+				
+	}
+	
+	
+	
+	
+	out.screen("-----------------------------------------" , "debug")
+	out.screen("            Delay Report                 " , "debug") 
+	out.screen("-----------------------------------------" , "debug")	
+	
+	var index;
+	for (index = 1; index < 13; index++) {
+		
+		out.screen(index + ": " + Actions[index] + " / " + delayedActions[index], "debug") 
+		
+	}
+		
+return delayedActions
+		
+		
+		
+}
+	
+	
+	

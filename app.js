@@ -31,26 +31,21 @@ ship = {};
 initPlayers();
 initShip();
 
-//temporarly changed this to 6 for a test. Change it  back to 13.
-while ( Turn <= 13) {
-	
-	gamelogic.processTurn();
-	Turn = Turn + 1
-}
-
-
+for (Turn = 0; Turn < 13; Turn++) {gamelogic.processTurn();}
 
 
 
 function initPlayers() {
 	var out = require("./output");
+	moves = game.PlayerActions
 	
 	for ( index = 0; index < game.NumPlayers; index++) {
 	
 		players.push(game.players[index])
 		players[index].position = "white"
 		players[index].deck = "upper"		
-		players[index].delay = 0		
+		players[index].delay = 0
+		players[index].actions = moves.filter(function(moves) {return moves.Player == players[index].Seat})[0];
 	}
 	
 	players.forEach(function(item, index, array) {
