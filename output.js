@@ -17,7 +17,8 @@ module.exports = {
 			"threatAction": 1,
 			"crewMove" : 1,
 			"delays" : 1,
-			"report" : 1
+			"report" : 1,
+			"computeDamage": 1
 		
 		}
 		

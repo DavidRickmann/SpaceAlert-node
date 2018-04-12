@@ -42,7 +42,7 @@
 		"code": "E1-03",
 		"level": "Normal (2/4)",
 		"name": "Stealth Fighter",
-		"speed": 4,
+		"speed": 3,
 		"hitpoints": 4,
 		"shields": 2,
 		"xaction": "Reveals itself",

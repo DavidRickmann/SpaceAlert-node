@@ -37,6 +37,8 @@ module.exports = {
 	
 	//Compute Damage
 	
+	computeDamage();
+	
 	//Threat Actions
 		
 	threatActions();	
@@ -61,7 +63,7 @@ module.exports = {
 	}
 	
 	//reset computer
-	if (Turn == 3 || Turn == 6) {ship.computer = "none"}
+	if (Turn == 2 || Turn == 5) {ship.computer = "none"}
 		
 		
 	//victory or defeat?
@@ -90,6 +92,7 @@ function threatAppears() {
 			enemy[Turn].trajectory = game.extthreats[Turn].trajectory
 			enemy[Turn].pos = track[enemy[Turn].trajectory].length-1
 			enemy[Turn].status = "Active"
+			enemy[Turn].distance = track[enemy[Turn].trajectory][enemy[Turn].pos].Distance
 			
 			out.screen("A " + enemy[Turn].name + "(" + Turn + ")" + " has appeared on " + enemy[Turn].trajectory + " at space " + enemy[Turn].pos, "threatAppears")
 
@@ -119,6 +122,7 @@ var out = require("./output");
 				for (moves = 0, speed = item.speed; moves < speed; ++moves) {
 								
 								item.pos = item.pos - 1
+								item.distance = track[item.trajectory][item.pos].Distance
 								//out.screen(item.name + "(" + index + ") has moved to " + item.trajectory + " " + item.pos)
 								if (track[item.trajectory][item.pos].Action == "-") {
 									
@@ -657,4 +661,123 @@ return delayedActions
 }
 	
 	
+function computeDamage() {
+
+	var out = require("./output");
+
+	var damageRed = 0
+	var damageWhite = 0
+	var damageBlue = 0
+	
+	var targetRed = "none"
+	var targetWhite = "none"
+	var targetBlue = "none"
+	
+	
+	
+	//set targets
+	
+	enemy.forEach(function(item, index, array) {
+		if (targetRed == "none") {
+			if (item.trajectory == "red" && item.status == "Active") {
+				targetRed = item
+			}
+		}
+	})
+	
+	enemy.forEach(function(item, index, array) {
+		if (targetWhite == "none") {
+			if (item.trajectory == "white" && item.status == "Active") {
+				targetWhite = item
+			}
+		}
+	})
+	
+	enemy.forEach(function(item, index, array) {
+		if (targetBlue == "none") {
+			if (item.trajectory == "blue" && item.status == "Active") {
+				targetBlue = item
+			}
+		}
+	})
+	//damage 
+	
+	if (lasers.red != "none") {
+		if (targetRed.distance < 3) {
+			damageRed = damageRed  + 4
+		}
+	}
+	
+	if (lasers.white != "none") {
+		if (targetWhite.distance < 3) {
+			damageWhite = damageWhite  + 5
+		}
+	}
+	
+	if (lasers.blue != "none") {
+		if (targetBlue.distance < 3) {
+			damageBlue = damageBlue  + 4
+		}
+	}
+	
+	
+	if (lasers.redsmall != "none") {
+		if (targetRed.distance < 3) {
+			damageRed = damageRed  + 2
+		}
+	}
+	
+	if (lasers.bluesmall != "none") {
+		if (targetBlue.distance < 3) {
+			damageBlue = damageBlue  + 2
+		}
+	}
+	
+	if (lasers.pulse != "none") {
+		if (targetRed.distance < 2) {
+			damageRed = damageRed  + 1
+		}
+		if (targetWhite.distance < 2) {
+			damageWhite = damageWhite  + 1
+		}
+		if (targetBlue.distance < 2) {
+			damageBlue = damageBlue  + 1
+		}
+	}
+	
+	
+	//red Target
+		checkDamage(damageRed, targetRed)
+		checkDamage(damageBlue, targetBlue)
+		checkDamage(damageWhite, targetWhite)
+
+	
+	
+}
+
+function checkDamage(damage, target) { 
+	var out = require("./output");
+	
+	if (damage > 0) {
+	out.screen("Target: " + target.name + " at distance "  + target.distance  + " takes "  + damage  + " damage", "computeDamage")
+		if (target.shields != 0) {
+			out.screen(target.shields + " damage is absorbed by shields", "computeDamage")
+			damage = damage - target.shields
+		}
+	}	
+	
+	if (damage > 0) {
+		target.hitpoints = target.hitpoints - damage
+		if (target.hitpoints < 1) {
+			target.status = "destroyed"
+			out.screen(target.name + " was destroyed", "computeDamage")
+		} else {
+			out.screen(target.name + " took "  + damage  + " damage and has " + target.hitpoints + " hp remaining" , "computeDamage")
+		}
+	}
+
+	
+}
+	
+
 	

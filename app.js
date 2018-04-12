@@ -6,6 +6,7 @@ var mysql      = require('mysql');
 var gamelogic = require("./gamelogic");
 var game = require("./gamestate.json");
 var trajectory = require("./trajectory.json");
+var out = require("./output");
 //var app = express();
 //app.use('/node_modules',  express.static(__dirname + '/node_modules'));
 //app.use('/style',  express.static(__dirname + '/style'));
@@ -34,6 +35,13 @@ initShip();
 for (Turn = 0; Turn < 13; Turn++) {gamelogic.processTurn();}
 
 
+enemy.forEach (function(item, index, array) {
+	if (item.name != "none") {
+		out.screen("enemy(" + index + "): " + item.name + " status: " + item.status, "turn")
+	}
+	
+	
+})
 
 function initPlayers() {
 	var out = require("./output");
